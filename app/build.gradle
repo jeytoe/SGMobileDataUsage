@@ -32,6 +32,8 @@ dependencies {
     implementation libraries.androidSupportAnnotations
     implementation libraries.dagger
     implementation libraries.daggerAndroid
+    implementation libraries.okhttpLoggingInterceptor
+    implementation libraries.rxAndroid
 
     testImplementation unitTestLibraries.assertj
     testImplementation unitTestLibraries.junit

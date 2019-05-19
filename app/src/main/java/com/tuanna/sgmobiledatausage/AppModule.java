@@ -4,8 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import com.tuanna.sgmobiledatausage.main.Contract;
+import com.tuanna.sgmobiledatausage.main.MainPresenter;
 import com.tuanna.sgmobiledatausage.network.MobileUsageAPI;
 import com.tuanna.sgmobiledatausage.network.RetrofitClient;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.disposables.CompositeDisposable;
@@ -48,12 +51,6 @@ public class AppModule {
         return new CompositeDisposable();
     }
 
-//  @Provides
-//  @Singleton
-//  Retrofit providesRetrofit() {
-//    return RetrofitClient.Companion.getClient();
-//  }
-
     @Provides
     @Singleton
     MobileUsageAPI providesMobileUsageService() {
@@ -65,5 +62,4 @@ public class AppModule {
     static SharedPreferences provideSettingsPreferencesSharedPreferences(Context context) {
         return context.getSharedPreferences(SETTINGS_PREFERENCES_SHARED_PREFS, Context.MODE_PRIVATE);
     }
-
 }

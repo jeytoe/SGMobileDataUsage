@@ -26,6 +26,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
 
+        injectDependency();
         setupToolbar();
         setupToolbarTitle(getToolbarTitle());
     }

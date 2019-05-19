@@ -2,7 +2,11 @@ package com.tuanna.sgmobiledatausage.network
 
 import com.google.gson.annotations.SerializedName
 
-data class MobileDataUsageResponse(var records: List<QuarterRecord>?)
+data class MobileDataUsageResponse(
+    var success: Boolean?,
+    var result: Result?)
+
+data class Result(var records: List<QuarterRecord>?)
 
 data class QuarterRecord(
     @SerializedName("volume_of_mobile_data")
