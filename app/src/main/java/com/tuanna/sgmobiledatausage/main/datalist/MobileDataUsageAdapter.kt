@@ -8,18 +8,20 @@ import com.tuanna.sgmobiledatausage.R
 import java.util.ArrayList
 import javax.inject.Inject
 
-class MobileDataUsageAdapter @Inject constructor(): Adapter<RecyclerView.ViewHolder>() {
+class MobileDataUsageAdapter @Inject constructor() : Adapter<RecyclerView.ViewHolder>() {
 
     var viewModels: List<MobileDataUsageViewModel> = emptyList()
-    set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    var onIconClickedListener: OnIconClickedListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_mobile_data_usage, parent, false)
-        return MobileDataUsageViewHolder(view)
+        return MobileDataUsageViewHolder(view, onIconClickedListener)
     }
 
     override fun getItemCount(): Int {

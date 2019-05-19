@@ -2,7 +2,11 @@ package com.tuanna.sgmobiledatausage.main
 
 import android.content.res.Resources
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.ViewAction
+import android.support.test.espresso.action.ViewActions
+import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import android.support.test.espresso.intent.rule.IntentsTestRule
 import android.support.test.espresso.matcher.ViewMatchers.*
@@ -12,23 +16,68 @@ import com.tuanna.sgmobiledatausage.R
 import com.tuanna.sgmobiledatausage.main.RecyclerViewMatcher.Companion.withRecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
 class MainActivityRobot {
 
-    fun launchActivity(rule: IntentsTestRule<MainActivity>): MainActivityRobot {
+    fun launchesActivity(rule: IntentsTestRule<MainActivity>): MainActivityRobot {
         rule.launchActivity(null)
         return this
     }
 
-    fun seeItemAtPosition(message: String, position: Int): MainActivityRobot {
+    fun seesItemAtPosition(message: String, position: Int): MainActivityRobot {
         onView(withId(R.id.dataListView)).perform(scrollToPosition<RecyclerView.ViewHolder>(position))
-        onView(withRecyclerView(R.id.dataListView)
+        onView(
+            withRecyclerView(R.id.dataListView)
                 .atPositionOnView(position, R.id.message)
         ).check(matches(allOf<View>(isDisplayed(), withText(message))))
 
+        return this
+    }
+
+    fun seesWarningIconAtPosition(position: Int): MainActivityRobot {
+        onView(withId(R.id.dataListView)).perform(scrollToPosition<RecyclerView.ViewHolder>(position))
+        onView(
+            withRecyclerView(R.id.dataListView)
+                .atPositionOnView(position, R.id.icon)
+        ).check(matches(isDisplayed()))
+
+        return this
+    }
+
+    fun doesNotSeeWarningIconAtPosition(position: Int): MainActivityRobot {
+        onView(withId(R.id.dataListView)).perform(scrollToPosition<RecyclerView.ViewHolder>(position))
+        onView(
+            withRecyclerView(R.id.dataListView)
+                .atPositionOnView(position, R.id.icon)
+        ).check(matches(not(isDisplayed())))
+
+        return this
+    }
+
+    fun clicksOnIconAtPosition(position: Int): MainActivityRobot {
+        onView(withId(R.id.dataListView)).perform(scrollToPosition<RecyclerView.ViewHolder>(position))
+        onView(
+            withRecyclerView(R.id.dataListView)
+                .atPositionOnView(position, R.id.icon)
+        ).check(matches(isDisplayed()))
+            .perform(click())
+        return this
+    }
+
+    fun seesDialogMessage(message: String): MainActivityRobot{
+        onView(withText(message))
+            .check(matches(isDisplayed()))
+        return this
+    }
+
+    fun clicksOnDialogsOkayButton(): MainActivityRobot {
+        onView(withText("OK"))
+            .check(matches(isDisplayed()))
+            .perform(click())
         return this
     }
 }

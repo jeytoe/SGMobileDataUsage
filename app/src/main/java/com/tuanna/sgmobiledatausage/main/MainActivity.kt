@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import com.tuanna.sgmobiledatausage.R
 import com.tuanna.sgmobiledatausage.main.datalist.MobileDataUsageAdapter
 import com.tuanna.sgmobiledatausage.main.datalist.MobileDataUsageViewModel
+import com.tuanna.sgmobiledatausage.main.datalist.OnIconClickedListener
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -44,6 +45,7 @@ class MainActivity : BaseActivity(), Contract.View {
     }
 
     override fun showDataList(viewModels: List<MobileDataUsageViewModel>) {
+        adapter.onIconClickedListener = this::displayPopup
         adapter.viewModels = viewModels
         dataListView.adapter = adapter
         dataListView.layoutManager = LinearLayoutManager(this)
