@@ -1,0 +1,27 @@
+ext.getExcluded = ['**/R.class',
+                   '**/*android.support*',
+                   '**/*widget*',
+                   '**/*Activity*',
+                   '**/*Fragment*',
+                   '**/*Widget*',
+                   '**/*ViewHolder*',
+                   '**/MobileDataUsageViewModel.class',
+                   '**/*Module*',
+                   '**/*Contract*',
+                   '**/*Adapter*',
+                   '**/*_ViewBinding*',
+                   '**/*$ViewInjector*.*',
+                   '**/*_Factory.class',
+                   '**/*$ViewBinder*.*',
+                   '**/BuildConfig.*',
+                   '**/Manifest*.*',
+                   '**/*_MembersInjector.class',
+                   '**/Dagger*Component*.class',
+                   '**/Dagger*Subcomponent*.class',
+                   '**/*Subcomponent$Builder.class',
+                   '**/MyApplication.class',
+                   '**/network/**']
+
+
+
+

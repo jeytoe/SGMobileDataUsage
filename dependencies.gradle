@@ -28,7 +28,7 @@ ext.versions = [
 
         leakCanary       : '1.6.1',
         perfecto         : '18.8.2',
-        jacoco           : '0.1.2',
+        jacoco           : '0.1.4',
 ]
 
 ext.libraries = [
