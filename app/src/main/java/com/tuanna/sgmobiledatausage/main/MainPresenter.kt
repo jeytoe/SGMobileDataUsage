@@ -23,12 +23,11 @@ class MainPresenter @Inject constructor(private var mobileDataUsageService: Mobi
             .doOnTerminate {
                 viewInstance.hideLoadingSpinner()
             }
-            .doOnError {
-                viewInstance.displayPopup("Error! Please try again!")
-            }
-            .subscribe {
+            .subscribe ({
                 handleResponse(it)
-            }
+            }, {
+                viewInstance.displayPopup("Error! Please try again!")
+            })
         compositeDisposable.add(disposable)
     }
 

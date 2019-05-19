@@ -41,6 +41,7 @@ ext.libraries = [
         dagger                   : "com.google.dagger:dagger-android:$versions.dagger",
         daggerAndroid            : "com.google.dagger:dagger-android-support:$versions.dagger",
         kotlinStd                : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin",
+        recyclerView             : "com.android.support:recyclerview-v7:$versions.androidSupport",
         rxBindingSupport         : "com.jakewharton.rxbinding2:rxbinding-support-v4:$versions.rxBinding",
         rxBindingAppCompat       : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$versions.rxBinding",
         rxBindingRecyclerView    : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$versions.rxBinding",

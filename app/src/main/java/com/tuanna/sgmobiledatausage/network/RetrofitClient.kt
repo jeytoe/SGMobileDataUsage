@@ -1,6 +1,7 @@
 package com.tuanna.sgmobiledatausage.network
 
 import com.google.gson.GsonBuilder
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -30,8 +31,9 @@ class RetrofitClient {
                     .build()
                 retrofit = Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addCallAdapterFactory(ObserveOnSchedulerCallAdapterFactory.create(AndroidSchedulers.mainThread()))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(client)
                     .build()
             }

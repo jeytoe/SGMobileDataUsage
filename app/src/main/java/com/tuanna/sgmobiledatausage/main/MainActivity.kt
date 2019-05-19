@@ -1,15 +1,24 @@
 package com.tuanna.sgmobiledatausage.main
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.support.v7.app.AlertDialog.Builder
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import com.tuanna.sgmobiledatausage.R
+import com.tuanna.sgmobiledatausage.main.datalist.MobileDataUsageAdapter
 import com.tuanna.sgmobiledatausage.main.datalist.MobileDataUsageViewModel
 import dagger.android.AndroidInjection
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), Contract.View {
 
     @Inject
     lateinit var presenter: Contract.Presenter
+
+    @Inject
+    lateinit var adapter: MobileDataUsageAdapter
 
     override fun getLayoutResId(): Int {
         return R.layout.activity_main
@@ -35,19 +44,35 @@ class MainActivity : BaseActivity(), Contract.View {
     }
 
     override fun showDataList(viewModels: List<MobileDataUsageViewModel>) {
+        adapter.viewModels = viewModels
+        dataListView.adapter = adapter
+        dataListView.layoutManager = LinearLayoutManager(this)
     }
 
     override fun displayPopup(message: String) {
+        val builder = Builder(this)
+        builder
+            .setMessage(message)
+            .setPositiveButton("OK", null)
+            .setCancelable(false)
+            .show()
     }
 
     override fun injectDependency() {
         AndroidInjection.inject(this)
     }
 
+    /**
+     * Simulate showing loading spinner.
+     * Can use fragment dialog, depends on requirements
+     */
     override fun showLoadingSpinner() {
         showSpinner()
     }
 
+    /**
+     * Simulate hiding loading spinner
+     */
     override fun hideLoadingSpinner() {
         hideSpinner()
     }

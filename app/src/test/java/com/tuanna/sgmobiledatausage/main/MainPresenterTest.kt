@@ -1,6 +1,8 @@
 package com.tuanna.sgmobiledatausage.main
 
+import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.verifyZeroInteractions
 import com.tuanna.sgmobiledatausage.main.datalist.MobileDataUsageViewModelFactory
 import com.tuanna.sgmobiledatausage.network.MobileDataUsageResponse
 import com.tuanna.sgmobiledatausage.network.MobileUsageAPI
@@ -68,7 +70,17 @@ class MainPresenterTest {
             .thenReturn(Observable.just(MobileDataUsageResponse(true, Result(records))))
         subject.onViewResumed()
         verify(viewModelFactory).getViewModels(records)
-        verify(view).showDataList(ArgumentMatchers.anyList())
+        verify(view).showDataList(anyList())
+    }
+
+    @Test
+    fun onViewResumed_onFailureResponse_verifyFactoryAndViewMethodsDidNotGetCalled() {
+        `when`(mobileDataUsageService.getMobileDataUsageData)
+            .thenReturn(Observable.error(IllegalArgumentException()))
+        subject.onViewResumed()
+        verifyZeroInteractions(viewModelFactory)
+        verify(view, times(0)).showDataList(anyList())
+        verify(view).displayPopup("Error! Please try again!")
     }
 
     @Test
