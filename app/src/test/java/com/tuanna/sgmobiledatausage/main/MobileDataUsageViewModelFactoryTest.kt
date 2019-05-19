@@ -43,4 +43,22 @@ class MobileDataUsageViewModelFactoryTest {
         assertThat(actual[1].year).isEqualTo(2018)
         assertThat(actual[1].total).isEqualTo(0.055)
     }
+
+    @Test
+    fun getViewModels_returnsViewModelsWithWarningIcon() {
+        val actual = subject.getViewModels(listOf(
+            QuarterRecord(0.011, "2017-Q1"),
+            QuarterRecord(0.022, "2017-Q2"),
+            QuarterRecord(0.033, "2017-Q3"),
+            QuarterRecord(0.032, "2017-Q4"),
+            QuarterRecord(0.055, "2018-Q1")
+        ))
+        assertThat(actual.size).isEqualTo(2)
+        assertThat(actual[0].year).isEqualTo(2017)
+        assertThat(actual[0].total).isEqualTo(0.098)
+        assertThat(actual[0].shouldShowIcon).isTrue()
+        assertThat(actual[1].year).isEqualTo(2018)
+        assertThat(actual[1].total).isEqualTo(0.055)
+        assertThat(actual[1].shouldShowIcon).isFalse()
+    }
 }

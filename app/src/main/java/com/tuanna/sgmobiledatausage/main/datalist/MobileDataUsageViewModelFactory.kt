@@ -12,7 +12,17 @@ class MobileDataUsageViewModelFactory @Inject constructor() {
 
         return records.groupBy { it.year }
             .map {
-               MobileDataUsageViewModel(it.key!!, it.value.sumByDouble { record -> record.volume!! })
+                var shouldShowInfoIcon = false
+                var previousQuarterValue = it.value[0].volume
+                it.value.forEach { quarter ->
+                    if (quarter.volume!! < previousQuarterValue!!) {
+                        shouldShowInfoIcon = true
+                    }
+                    previousQuarterValue = quarter.volume
+                }
+                MobileDataUsageViewModel(it.key!!,
+                    it.value.sumByDouble { record -> record.volume!! },
+                    shouldShowInfoIcon)
             }
     }
 }
