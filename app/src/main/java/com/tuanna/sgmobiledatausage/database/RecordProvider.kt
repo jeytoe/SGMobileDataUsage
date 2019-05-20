@@ -25,8 +25,3 @@ class RecordProvider @Inject constructor(
         return Observable.just(ResponseWrapper(entities))
     }
 }
-
-fun Pair<Double?, String?>.let(action: (pair: Pair<Double?, String?>) -> Unit) {
-    if (this.first != null && this.second != null)
-        action(this)
-}
