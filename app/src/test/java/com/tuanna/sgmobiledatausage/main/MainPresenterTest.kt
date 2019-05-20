@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyZeroInteractions
 import com.tuanna.sgmobiledatausage.database.RecordProvider
 import com.tuanna.sgmobiledatausage.database.ResponseWrapper
+import com.tuanna.sgmobiledatausage.database.entity.QuarterRecordEntity
 import com.tuanna.sgmobiledatausage.main.datalist.MobileDataUsageViewModelFactory
 import com.tuanna.sgmobiledatausage.network.MobileDataUsageResponse
 import com.tuanna.sgmobiledatausage.network.MobileUsageAPI
@@ -59,7 +60,8 @@ class MainPresenterTest {
     @Test
     fun onViewResumed_givenNetworkNotAvailable_verifyRepositoryCalled() {
         `when`(recordProvider.getRecordsFromDatabase())
-            .thenReturn(Observable.just(ResponseWrapper(emptyList())))
+            .thenReturn(Observable.just(ResponseWrapper(
+                listOf(QuarterRecordEntity(0.11, "2019-Q2")))))
         subject.onViewResumed(false)
         verify(recordProvider).getRecordsFromDatabase()
     }
