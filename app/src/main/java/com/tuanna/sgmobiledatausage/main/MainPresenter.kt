@@ -1,22 +1,27 @@
 package com.tuanna.sgmobiledatausage.main
 
+import com.tuanna.sgmobiledatausage.database.RecordProvider
+import com.tuanna.sgmobiledatausage.database.ResponseWrapper
 import com.tuanna.sgmobiledatausage.main.Contract.View
 import com.tuanna.sgmobiledatausage.main.datalist.MobileDataUsageViewModelFactory
-import com.tuanna.sgmobiledatausage.network.MobileDataUsageResponse
-import com.tuanna.sgmobiledatausage.network.MobileUsageAPI
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-class MainPresenter @Inject constructor(private var mobileDataUsageService: MobileUsageAPI,
-                                        private var compositeDisposable: CompositeDisposable,
-                                        private var viewModelFactory: MobileDataUsageViewModelFactory): Contract.Presenter {
+class MainPresenter @Inject constructor(private var compositeDisposable: CompositeDisposable,
+                                        private var viewModelFactory: MobileDataUsageViewModelFactory,
+                                        private var recordProvider: RecordProvider): Contract.Presenter {
 
     private lateinit var viewInstance: View
 
-    override fun onViewResumed() {
-        //check for internet connectivity here if required
+    override fun onViewResumed(hasNetworkConnection: Boolean) {
+        val responseWrapper: Observable<ResponseWrapper> = if (hasNetworkConnection) {
+            recordProvider.getRecordsFromAPI()
+        } else {
+            recordProvider.getRecordsFromDatabase()
+        }
 
-        val disposable = mobileDataUsageService.getMobileDataUsageData
+        val disposable = responseWrapper
             .doOnSubscribe {
                 viewInstance.showLoadingSpinner()
             }
@@ -39,8 +44,8 @@ class MainPresenter @Inject constructor(private var mobileDataUsageService: Mobi
         compositeDisposable.clear()
     }
 
-    private fun handleResponse(response: MobileDataUsageResponse) {
-        val viewModels = viewModelFactory.getViewModels(response.result?.records)
+    private fun handleResponse(response: ResponseWrapper) {
+        val viewModels = viewModelFactory.getViewModels(response.records)
         viewInstance.showDataList(viewModels)
     }
 }

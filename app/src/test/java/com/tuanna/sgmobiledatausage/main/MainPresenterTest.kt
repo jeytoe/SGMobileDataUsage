@@ -3,6 +3,8 @@ package com.tuanna.sgmobiledatausage.main
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyZeroInteractions
+import com.tuanna.sgmobiledatausage.database.RecordProvider
+import com.tuanna.sgmobiledatausage.database.ResponseWrapper
 import com.tuanna.sgmobiledatausage.main.datalist.MobileDataUsageViewModelFactory
 import com.tuanna.sgmobiledatausage.network.MobileDataUsageResponse
 import com.tuanna.sgmobiledatausage.network.MobileUsageAPI
@@ -30,9 +32,6 @@ class MainPresenterTest {
     lateinit var subject: MainPresenter
 
     @Mock
-    lateinit var mobileDataUsageService: MobileUsageAPI
-
-    @Mock
     lateinit var compositeDisposable: CompositeDisposable
 
     @Mock
@@ -41,24 +40,35 @@ class MainPresenterTest {
     @Mock
     lateinit var view: Contract.View
 
+    @Mock
+    lateinit var recordProvider: RecordProvider
+
     @Before
     fun setUp() {
         subject.setView(view)
     }
 
     @Test
-    fun onViewResumed_verifyServiceCalled() {
-        `when`(mobileDataUsageService.getMobileDataUsageData)
-            .thenReturn(Observable.just(MobileDataUsageResponse(true, null)))
-        subject.onViewResumed()
-        verify(mobileDataUsageService).getMobileDataUsageData
+    fun onViewResumed_givenNetworkIsAvailable_verifyServiceCalled() {
+        `when`(recordProvider.getRecordsFromAPI())
+            .thenReturn(Observable.just(ResponseWrapper(emptyList())))
+        subject.onViewResumed(true)
+        verify(recordProvider).getRecordsFromAPI()
+    }
+
+    @Test
+    fun onViewResumed_givenNetworkNotAvailable_verifyRepositoryCalled() {
+        `when`(recordProvider.getRecordsFromDatabase())
+            .thenReturn(Observable.just(ResponseWrapper(emptyList())))
+        subject.onViewResumed(false)
+        verify(recordProvider).getRecordsFromDatabase()
     }
 
     @Test
     fun onViewResumed_verifySpinnerShownAndHidden() {
-        `when`(mobileDataUsageService.getMobileDataUsageData)
-            .thenReturn(Observable.just(MobileDataUsageResponse(true, null)))
-        subject.onViewResumed()
+        `when`(recordProvider.getRecordsFromAPI())
+            .thenReturn(Observable.just(ResponseWrapper(emptyList())))
+        subject.onViewResumed(true)
         verify(view).showLoadingSpinner()
         verify(view).hideLoadingSpinner()
     }
@@ -66,18 +76,18 @@ class MainPresenterTest {
     @Test
     fun onViewResumed_onSuccessResponse_verifyFactoryAndViewMethodsCalled() {
         val records = emptyList<QuarterRecord>()
-        `when`(mobileDataUsageService.getMobileDataUsageData)
-            .thenReturn(Observable.just(MobileDataUsageResponse(true, Result(records))))
-        subject.onViewResumed()
+        `when`(recordProvider.getRecordsFromAPI())
+            .thenReturn(Observable.just(ResponseWrapper(emptyList())))
+        subject.onViewResumed(true)
         verify(viewModelFactory).getViewModels(records)
         verify(view).showDataList(anyList())
     }
 
     @Test
     fun onViewResumed_onFailureResponse_verifyFactoryAndViewMethodsDidNotGetCalled() {
-        `when`(mobileDataUsageService.getMobileDataUsageData)
+        `when`(recordProvider.getRecordsFromAPI())
             .thenReturn(Observable.error(IllegalArgumentException()))
-        subject.onViewResumed()
+        subject.onViewResumed(true)
         verifyZeroInteractions(viewModelFactory)
         verify(view, times(0)).showDataList(anyList())
         verify(view).displayPopup("Error! Please try again!")

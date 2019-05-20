@@ -1,0 +1,15 @@
+package com.tuanna.sgmobiledatausage.network
+
+import android.content.Context
+import android.net.ConnectivityManager
+import javax.inject.Inject
+
+class NetworkConnectivityUtil @Inject constructor() {
+
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
+}

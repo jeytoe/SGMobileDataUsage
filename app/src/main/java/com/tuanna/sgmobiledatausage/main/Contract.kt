@@ -14,7 +14,7 @@ interface Contract {
 
     interface Presenter {
         fun setView(view: View)
-        fun onViewResumed()
+        fun onViewResumed(hasNetworkConnection: Boolean)
         fun onViewStopped()
     }
 }

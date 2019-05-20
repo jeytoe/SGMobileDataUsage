@@ -1,14 +1,12 @@
 package com.tuanna.sgmobiledatausage.main
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.support.v7.app.AlertDialog.Builder
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import com.tuanna.sgmobiledatausage.R
 import com.tuanna.sgmobiledatausage.main.datalist.MobileDataUsageAdapter
 import com.tuanna.sgmobiledatausage.main.datalist.MobileDataUsageViewModel
-import com.tuanna.sgmobiledatausage.main.datalist.OnIconClickedListener
+import com.tuanna.sgmobiledatausage.network.NetworkConnectivityUtil
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -20,6 +18,9 @@ class MainActivity : BaseActivity(), Contract.View {
 
     @Inject
     lateinit var adapter: MobileDataUsageAdapter
+
+    @Inject
+    lateinit var networkConnectivityUtil: NetworkConnectivityUtil
 
     override fun getLayoutResId(): Int {
         return R.layout.activity_main
@@ -36,7 +37,7 @@ class MainActivity : BaseActivity(), Contract.View {
 
     override fun onResume() {
         super.onResume()
-        presenter.onViewResumed()
+        presenter.onViewResumed(networkConnectivityUtil.isNetworkAvailable(this))
     }
 
     override fun onStop() {
