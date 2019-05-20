@@ -3,6 +3,7 @@ package com.tuanna.sgmobiledatausage;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
+import com.tuanna.sgmobiledatausage.database.DatabaseLibraryModule;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
@@ -35,6 +36,7 @@ public class MyApplication extends Application implements HasActivityInjector, H
     protected void buildAppComponent() {
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
+                .databaseLibraryModule(new DatabaseLibraryModule(this))
                 .build();
 
         appComponent.inject(this);

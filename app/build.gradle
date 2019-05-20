@@ -42,12 +42,12 @@ dependencies {
     implementation libraries.daggerAndroid
     implementation libraries.okhttpLoggingInterceptor
     implementation libraries.rxAndroid
+    implementation libraries.room
 
     testImplementation unitTestLibraries.assertj
     testImplementation unitTestLibraries.junit
     testImplementation unitTestLibraries.mockito
     testImplementation unitTestLibraries.kotlinMockito
-//    testImplementation unitTestLibraries.kotlinReflect
 
     androidTestImplementation instrumentationTestLibraries.espressoCore
     androidTestImplementation instrumentationTestLibraries.espressoIntents
@@ -57,14 +57,16 @@ dependencies {
     androidTestImplementation instrumentationTestLibraries.uiAutomator
     androidTestImplementation instrumentationTestLibraries.testButler
     androidTestImplementation instrumentationTestLibraries.rxIdler
-//    androidTestImplementation instrumentationTestLibraries.spoon
     androidTestImplementation unitTestLibraries.assertj
 
     annotationProcessor compilers.daggerAndroid
     annotationProcessor compilers.dagger
+    annotationProcessor compilers.room
 
     kapt compilers.dagger
     kapt compilers.daggerAndroid
+    kapt compilers.room
+
     kaptAndroidTest compilers.dagger
     compileOnly annotations.jsr250
 }
